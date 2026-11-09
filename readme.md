@@ -1,3 +1,10 @@
+# Projeto A3 - Qualidade e Testes de Software
+
+## Integrantes do Grupo
+* Leonardo Min Woo Cha - RA: 12524233971
+* Theo Yokote Saito - RA: 12524232132
+* Pedro Callegari Fernandes - RA: 12524225270
+
 # React Frontend for Spring Boot PetClinic demo
 [![Build Status](https://travis-ci.org/spring-petclinic/spring-petclinic-reactjs.svg?branch=master)](https://travis-ci.org/spring-petclinic/spring-petclinic-reactjs)
 
