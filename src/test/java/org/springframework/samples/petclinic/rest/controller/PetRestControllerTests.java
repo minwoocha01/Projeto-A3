@@ -244,4 +244,13 @@ class PetRestControllerTests {
                 .content(new String()).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(status().isBadRequest());
     }
+
+@Test
+    @WithMockUser(roles = "OWNER_ADMIN")
+    public void testGetPetNotFound_CT07() throws Exception {
+        given(this.clinicService.findPetById(999)).willReturn(null);
+        this.mockMvc.perform(get("/api/pets/999")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
 }
