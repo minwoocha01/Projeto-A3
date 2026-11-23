@@ -9,7 +9,7 @@ Repositório baseado no **Spring Petclinic REST** (`Java 21` + `Maven`), avaliad
 
 ---
 
-## 1. Como Executar os Testes
+## 1. Testes
 
 * **Suíte funcional e de regressão (185 testes — `BUILD SUCCESS`):**
   ```bash
