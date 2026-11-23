@@ -1,4 +1,4 @@
-# Projeto A3 - Qualidade e Testes de Software (Entrega 3)
+# Projeto A3 - Gestão e Qualidade de Software (Entrega 3)
 
 ## Integrantes do Grupo
 * Leonardo Min Woo Cha - RA: 12524233971
