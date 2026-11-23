@@ -1,9 +1,74 @@
-# Projeto A3 - Qualidade e Testes de Software
+# Projeto A3 - Qualidade e Testes de Software (Entrega 3)
 
 ## Integrantes do Grupo
 * Leonardo Min Woo Cha - RA: 12524233971
 * Theo Yokote Saito - RA: 12524232132
 * Pedro Callegari Fernandes - RA: 12524225270
+
+Repositório baseado no **Spring Petclinic REST** (`Java 21` + `Maven`), avaliado por meio de testes funcionais automatizados (JUnit 5 / MockMvc), cobertura de código (JaCoCo) e análise estática (SonarQube Cloud).
+
+---
+
+## 1. Como Executar os Testes
+
+* **Suíte funcional e de regressão (185 testes — `BUILD SUCCESS`):**
+  ```bash
+  mvn test -Dtest=!SecurityAndReliabilityAuditTests
+  ```
+* **Suíte de auditoria de Segurança e Fiabilidade (3 testes de diagnóstico — 2 falhas intencionais que comprovam vulnerabilidades):**
+  ```bash
+  mvn test -Dtest=SecurityAndReliabilityAuditTests
+  ```
+
+---
+
+## 2. Casos de Teste Implementados e Executados
+
+| ID | Cenário | Método / Classe de Teste | Status |
+| :--- | :--- | :--- | :--- |
+| **CT-01 a CT-05** | Fluxos principais de consulta, cadastro e atualização da API REST | Suíte de regressão (`OwnerRestControllerTests`, `PetRestControllerTests`, etc.) | Passou |
+| **CT-06** | Consulta de proprietário inexistente (`GET /api/owners/999` -> HTTP 404) | `testGetOwnerNotFound_CT06` (`OwnerRestControllerTests.java`) | Passou |
+| **CT-07** | Consulta de pet inexistente (`GET /api/pets/999` -> HTTP 404) | `testGetPetNotFound_CT07` (`PetRestControllerTests.java`) | Passou |
+
+---
+
+## 3. Métricas de Cobertura (JaCoCo)
+
+* **Cobertura global de instruções:** **87%** (meta mínima: 80%)
+* **Cobertura global de ramificações (*branches*):** **67%**
+* **Camada de Serviços (`service`):** **97%**
+* **Camada de Controladores REST (`rest.controller`):** **89%** (com **96%** em `OwnerRestController` e **96%** em `PetRestController`)
+
+---
+
+## 4. Inspeção Estática (SonarQube Cloud)
+
+* **Painel público da análise:** [Acessar SonarQube Cloud — minwoocha01/Projeto-A3](https://sonarcloud.io/project/overview?id=minwoocha01_Projeto-A3)
+* **Manutenibilidade (*Maintainability*):** Nota **A** (14 *code smells*)
+* **Duplicação de Código (*Duplications*):** **0,0%**
+* **Segurança (*Security*):** Nota **E** (24 problemas em aberto)
+* **Fiabilidade (*Reliability*):** Nota **D** (18 problemas em aberto)
+* **Riscos em Dependências (*Dependency risks*):** Nota **D** (152 alertas)
+
+---
+
+## 5. Auditoria Automatizada e Correções Recomendadas
+
+A classe `SecurityAndReliabilityAuditTests.java` executa 3 testes de diagnóstico para detectar falhas apontadas pelo SonarQube sem alterar o código de produção (`src/main`):
+
+| Categoria | Problema Detectado | Evidência no Teste | Solução Recomendada |
+| :--- | :--- | :--- | :--- |
+| **Security** (`java:S4502`) | Proteção CSRF desabilitada | `testDetectarFaltaDeProtecaoCsrf_Security` falhou (esperava `403`, recebeu `400`) | Habilitar CSRF ou adotar autenticação *stateless* via **JWT**. |
+| **Security** (`java:S5122`) | Política CORS aberta (`*`) | `testDetectarCorsPermissivo_Security` falhou (cabeçalho `Access-Control-Allow-Origin` exposto) | Restringir `allowedOrigins` apenas ao domínio oficial do front-end. |
+| **Reliability** (`java:S2259`) | Validação de entrada vazia | `testDetectarFalhaTratamentoPayloadNulo_Reliability` passou (retornou `400 Bad Request`) | Manter `@Valid` / `@NotNull` nos DTOs e usar `Optional` nos repositórios. |
+| **Dependencies** | 152 alertas em bibliotecas | Relatório SCA do SonarQube Cloud | Atualizar a versão do `spring-boot-starter-parent` no `pom.xml`. |
+
+---
+
+## 6. Decisão de Qualidade (*Quality Decision*)
+
+* **Veredito:** **NO-GO para Produção** (Aprovado apenas para Ambiente de Homologação).
+* **Justificativa:** O comportamento funcional e a cobertura de testes superaram as metas estabelecidas (185 testes passando e 87% de cobertura no JaCoCo), além de o código apresentar nota A em Manutenibilidade e 0% de duplicação. Contudo, a publicação em produção é vetada devido às 24 vulnerabilidades de Segurança (nota E), 18 falhas de Fiabilidade (nota D) e 152 riscos em dependências desatualizadas identificados no SonarQube Cloud.
 
 # React Frontend for Spring Boot PetClinic demo
 [![Build Status](https://travis-ci.org/spring-petclinic/spring-petclinic-reactjs.svg?branch=master)](https://travis-ci.org/spring-petclinic/spring-petclinic-reactjs)
